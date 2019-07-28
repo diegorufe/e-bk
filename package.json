@@ -4,7 +4,11 @@
   "description": "Electron data backup ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ebk-e": "electron .",
+    "rebuild": "electron-rebuild -f -w sqlite3",
+    "pack": "build --dir",
+    "dist": "build"
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,22 @@
   "bugs": {
     "url": "https://github.com/diegorufe/e-bk/issues"
   },
-  "homepage": "https://github.com/diegorufe/e-bk#readme"
+  "homepage": "https://github.com/diegorufe/e-bk#readme",
+  "devDependencies": {
+    "electron": "^3.0.10",
+    "electron-builder": "^20.38.3",
+    "electron-packager": "^13.0.0",
+    "electron-rebuild": "^1.8.2"
+  },
+  "dependencies": {
+    "sequelize": "^4.42.0",
+    "sqlite3": "^4.0.4"
+  },
+  "build": {
+    "asar": true,
+    "appId": "e-bk",
+    "win": {
+      "icon": "resources/images/icons/256x256.ico"
+    }
+  }
 }
