@@ -10,6 +10,7 @@ const E_BK_ID_HEADER_FOLDER_DIRECTORY = "e-bk-header-folder-directory";
  * Method to init application
  */
 function init() {
+    loadI18n();
     initFolderDestination();
 }
 
@@ -25,6 +26,7 @@ function initFolderDestination() {
         inputHeaderFolder.type = "text";
         inputHeaderFolder.classList.add('e-bk-input-text-folder');
         inputHeaderFolder.id = E_BK_ID_HEADER_FOLDER;
+        inputHeaderFolder.onchange = onChangeFileFolder;
         headerContainer.appendChild(inputHeaderFolder);
 
         // Input file for selecction folder 
@@ -45,6 +47,9 @@ function initFolderDestination() {
                 let file = files[0];
                 if (file != null && file != undefined) {
                     getElementById(E_BK_ID_HEADER_FOLDER).value = file.path;
+                    var eventInput = new Event('change', { bubbles: true });
+                    getElementById(E_BK_ID_HEADER_FOLDER).dispatchEvent(eventInput);
+                    //getElementById(E_BK_ID_HEADER_FOLDER).onchange();
                 }
             }
         };
@@ -54,24 +59,24 @@ function initFolderDestination() {
         let labelInputFolder = createElement("LABEL");
         labelInputFolder.setAttribute('for', E_BK_ID_HEADER_FOLDER_DIRECTORY);
         labelInputFolder.classList.add('e-bk-input-folder-label');
-        labelInputFolder.innerText = 'Label';
+        labelInputFolder.innerText = I18N.i18n_select_folder;
         headerContainer.appendChild(labelInputFolder);
 
     }
 }
 
 /**
- * Method to get element by id 
- * @param {*} id is the id asociated for element in the html view
+ * On chage file or folder 
+ * @param {*} event 
  */
-function getElementById(id) {
-    return id != null && id != undefined ? document.getElementById(id) : null;
-}
-
-/**
- * Method to create element 
- * @param {*} tagName is the name for the element to create
- */
-function createElement(tagName) {
-    return document.createElement(tagName);
+function onChangeFileFolder(event) {
+    if (event != null) {
+        let value = event.target.value;
+        if (value != null && value != undefined && value.trim() != '') {
+            // If file not exsite, set blank value
+            if (!existFileOrFolder(value)) {
+                getElementById(event.target.id).value = '';
+            }
+        }
+    }
 }
