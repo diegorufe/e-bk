@@ -1,0 +1,16 @@
+.button{
+    float: left;
+    color: #fff;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.succes{
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.danger{
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
