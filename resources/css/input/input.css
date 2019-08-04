@@ -16,3 +16,9 @@
     border: 1px solid white;
     padding: 4px;
 }
+
+.e-bk-line-input{
+    float: left;
+    width: 80%;
+    padding: 5px;
+}

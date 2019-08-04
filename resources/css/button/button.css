@@ -14,3 +14,9 @@
     background-color: #dc3545;
     border-color: #dc3545;
 }
+
+.delete-line{
+    margin-left: 5px;
+    height: 30px;
+    margin-top: -0px;
+}

@@ -1,5 +1,7 @@
 {
     "i18n_select_folder": "Select folder",
     "i18n_add_item": "Add",
-    "i18n_delete_all": "Delete all"
+    "i18n_delete_all": "Delete all",
+    "i18n_delete": "Delete",
+    "i18n_backup": "Backup"
 }

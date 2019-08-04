@@ -32,3 +32,17 @@ body, html, .e-bk{
     float: left;
     height: 40px;
 }
+
+.e-bk-lines{
+    float: left;
+    width: 100%;
+    height: calc(100% - 40px);
+    max-height: calc(100% - 40px);
+    overflow: auto;
+}
+
+.e-bk-line{
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
