@@ -7,10 +7,20 @@ var path = require('path');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+// Connect to database
+const DB = require('./resources/db/db').DB;
+
+const DB_DATA = DB.connectDb();
+
 /**
  * Method to create window for app
  */
-function createWindow() {
+async function createWindow() {
+
+  // Load all items and folder
+  global.itemsList = await DB_DATA.Item.findAll();
+  global.folder = await DB_DATA.Folder.findOne();
+  global.app = "e-bk";
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -18,8 +28,6 @@ function createWindow() {
     icon: path.join(__dirname, 'resources/images/icons/app.jpg'),
     backgroundColor: '#312450',
   })
-
-
 
   // and load the index.html of the app.
   mainWindow.loadFile('./resources/pages/index.html');

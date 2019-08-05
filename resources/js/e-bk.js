@@ -8,6 +8,7 @@ const E_BK_ID_HEADER_FOLDER_DIRECTORY = "e-bk-header-folder-directory";
 const E_BK_ID_BUTTON_ADD = "e-bk-addItem";
 const E_BK_ID_BUTTON_DELETEL_ALL = "e-bk-deleteAll";
 const E_BK_ID_LINES = "e-bk-lines";
+const remote = require('electron').remote;
 
 const E_BK_DATA = {
     "folderDestination": null,
@@ -27,6 +28,9 @@ function init() {
  * Method to init folder destination for copy data 
  */
 function initFolderDestination() {
+
+    //console.log(remote.getGlobal('app'));
+
     let headerContainer = getElementById(E_BK_ID_HEADER);
 
     if (headerContainer != null && headerContainer != undefined) {
