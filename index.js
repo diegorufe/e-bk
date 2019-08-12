@@ -17,10 +17,36 @@ const DB_DATA = DB.connectDb();
  */
 async function createWindow() {
 
-  // Load all items and folder
-  global.itemsList = await DB_DATA.Item.findAll();
-  global.folder = await DB_DATA.Folder.findOne();
   global.app = "e-bk";
+
+  // Find all items
+  global.findAllItems = async function () {
+    return await DB_DATA.Item.findAll();
+  };
+
+  // UpdateCreateItem
+  global.updateCreateItem = async function (code, path) {
+    //
+  };
+
+  global.deleteItem = async function (code) {
+    //
+  };
+
+  // UpdateFolder
+  global.updateCreateFolder = async function (path) {
+
+  };
+
+  // Delete folder
+  global.deleteFolder = async function () {
+
+  }
+
+  // Find folder
+  global.findFolder = async function () {
+    return await DB_DATA.Folder.findOne();
+  };
 
   // Create the browser window.
   mainWindow = new BrowserWindow({

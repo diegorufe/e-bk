@@ -100,7 +100,7 @@ function initFolderDestination() {
 /**
  * Method to generate backup
  */
-function backup(){
+function backup() {
 
 }
 
@@ -144,14 +144,14 @@ function onChangeFileFolder(event, idBk) {
 function addItem(idItem, valueItem) {
     if (idItem == null || idItem == undefined) {
         let keys = Object.keys(E_BK_DATA.backupdData);
-        if (keys == null || keys == undefined) {
+        if (keys == null || keys == undefined || keys.length == 0) {
             idItem = 0;
         } else {
-            idItem = keys[keys.length - 1] + 1;
+            idItem = parseInt(keys[keys.length - 1]) + 1;
         }
     }
 
-    E_BK_DATA.backupdData[idItem] = valueItem;
+    E_BK_DATA.backupdData[idItem] = valueItem instanceof String ? parseInt(valueItem) : valueItem;
 
     let linesContainer = document.getElementById(E_BK_ID_LINES);
 
@@ -174,6 +174,68 @@ function addItem(idItem, valueItem) {
     };
 
     lineDiv.appendChild(inputLine);
+
+    // Select folder 
+    let inputItemFolder = createElement("INPUT");
+    inputItemFolder.type = "file";
+    inputItemFolder.id = inputLine.id + "Folder";
+    inputItemFolder.classList.add('e-bk-input-folder');
+    inputItemFolder.setAttribute('webkitdirectory', '');
+    inputItemFolder.setAttribute('mozdirectory', '');
+    inputItemFolder.setAttribute('msdirectory', '');
+    inputItemFolder.setAttribute('odirectory', '');
+    inputItemFolder.setAttribute('directory', '');
+
+    // On change folder set path for input text folder 
+    inputItemFolder.onchange = function (event) {
+        let files = event.target.files;
+        if (files != null && files != undefined && files.length > 0) {
+            let file = files[0];
+            if (file != null && file != undefined) {
+                getElementById(inputLine.id).value = file.path;
+                var eventInput = new Event('change', { bubbles: true });
+                getElementById(inputLine.id).dispatchEvent(eventInput);
+            }
+        }
+    };
+
+    lineDiv.appendChild(inputItemFolder);
+
+    let labelInputFolder = createElement("LABEL");
+    labelInputFolder.setAttribute('for', inputLine.id + "Folder");
+    labelInputFolder.classList.add('e-bk-input-folder-label');
+    labelInputFolder.innerText = I18N.i18n_select_folder;
+    lineDiv.appendChild(labelInputFolder);
+
+    // Select file 
+    // Select folder 
+    let inputItemFile = createElement("INPUT");
+    inputItemFile.type = "file";
+    inputItemFile.id = inputLine.id + "File";
+    inputItemFile.classList.add('e-bk-input-folder');
+
+    // On change folder set path for input text folder 
+    inputItemFile.onchange = function (event) {
+        let files = event.target.files;
+        if (files != null && files != undefined && files.length > 0) {
+            let file = files[0];
+            if (file != null && file != undefined) {
+                getElementById(inputLine.id).value = file.path;
+                var eventInput = new Event('change', { bubbles: true });
+                getElementById(inputLine.id).dispatchEvent(eventInput);
+            }
+        }
+    };
+
+    lineDiv.appendChild(inputItemFile);
+
+    let labelInputFile = createElement("LABEL");
+    labelInputFile.setAttribute('for', inputLine.id + "File");
+    labelInputFile.classList.add('e-bk-input-folder-label');
+    labelInputFile.innerText = I18N.i18n_select_file;
+    lineDiv.appendChild(labelInputFile);
+
+    // Button delete 
 
     let buttonLine = document.createElement("BUTTON");
 
