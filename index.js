@@ -21,26 +21,38 @@ async function createWindow() {
 
   // Find all items
   global.findAllItems = async function () {
-    return await DB_DATA.Item.findAll();
+    return await DB_DATA.Item.findAll({
+      // Add order conditions here....
+      order: [
+        ['code', 'ASC'],
+      ]
+    });
   };
 
   // UpdateCreateItem
-  global.updateCreateItem = async function (code, path) {
-    //
+  global.createItem = async function (codeFile, pathFile) {
+    return await DB_DATA.Item.create({ code: codeFile, path: pathFile });
   };
 
-  global.deleteItem = async function (code) {
-    //
+  // Delete all items
+  global.deleteAllItems = async function () {
+    return await DB_DATA.Item.destroy({
+      where: {},
+      truncate: true
+    });
   };
 
   // UpdateFolder
-  global.updateCreateFolder = async function (path) {
-
+  global.createFolder = async function (pathFolder) {
+    return await DB_DATA.Folder.create({ path: pathFolder });
   };
 
-  // Delete folder
-  global.deleteFolder = async function () {
-
+  // Delete all folders
+  global.deleteAllFolders = async function () {
+    return await DB_DATA.Folder.destroy({
+      where: {},
+      truncate: true
+    });
   }
 
   // Find folder

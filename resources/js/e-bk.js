@@ -27,11 +27,19 @@ function init() {
 /**
  * Method to init folder destination for copy data 
  */
-function initFolderDestination() {
+async function initFolderDestination() {
 
     //console.log(remote.getGlobal('app'));
 
     let headerContainer = getElementById(E_BK_ID_HEADER);
+
+    let folder = await remote.getGlobal('findFolder')();
+
+    if (folder == null || folder == undefined || !existFileOrFolder(folder.path)) {
+        folder = '';
+    } else {
+        folder = folder.path;
+    }
 
     if (headerContainer != null && headerContainer != undefined) {
         // Input text folder destination 
@@ -39,6 +47,7 @@ function initFolderDestination() {
         inputHeaderFolder.type = "text";
         inputHeaderFolder.classList.add('e-bk-input-text-folder');
         inputHeaderFolder.id = E_BK_ID_HEADER_FOLDER;
+        inputHeaderFolder.value = folder;
         inputHeaderFolder.onchange = function (event) {
             onChangeFileFolder(event, null);
         };
@@ -100,8 +109,40 @@ function initFolderDestination() {
 /**
  * Method to generate backup
  */
-function backup() {
+async function backup() {
+    let folder = document.getElementById(E_BK_ID_HEADER_FOLDER).value;
+    const path = require('path');
+    let folderBack = null;
 
+    if (folder != null && folder != undefined && folder.trim() != "") {
+        folderBack = path.join(folder, new Date().toISOString().replace(".", "M").replace("-", "").replace("-", "").replace(":", "").replace(":", ""));
+        await remote.getGlobal('deleteAllFolders')();
+        console.log(await remote.getGlobal('createFolder')(folder));
+        mkdir(folderBack);
+    }
+
+    try {
+        // Get all inputs line 
+        let inputLines = document.getElementsByClassName('e-bk-line-input');
+
+        if (inputLines != null && inputLines != undefined && inputLines.length > 0) {
+            let inputValue = null;
+            let inputId = null;
+            for (let i = 0; i < inputLines.length; i++) {
+                inputId = parseInt(inputLines[i].id.replace("LineInput", ""));
+                inputValue = inputLines[i].value;
+
+                if (inputValue != null && inputValue != undefined && inputValue.trim() != "") {
+                    copyRecursiveSync(inputValue, path.join(folderBack, path.basename(inputValue)));
+                }
+            }
+        }
+
+    } catch (ex) {
+        console.log(ex);
+        // if have errors remove folder backup
+        rmdir(folderBack);
+    }
 }
 
 /**
