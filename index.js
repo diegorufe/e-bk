@@ -63,7 +63,7 @@ async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     show: false,
-    icon: path.join(__dirname, 'resources/images/icons/app.jpg'),
+    icon: path.join(__dirname, 'resources/images/icons/app.ico'),
     backgroundColor: '#312450',
   })
 
