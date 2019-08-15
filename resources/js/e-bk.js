@@ -34,6 +34,7 @@ async function initFolderDestination() {
     let headerContainer = getElementById(E_BK_ID_HEADER);
 
     let folder = await remote.getGlobal('findFolder')();
+    let items = await remote.getGlobal('findAllItems')();
 
     if (folder == null || folder == undefined || !existFileOrFolder(folder.path)) {
         folder = '';
@@ -104,6 +105,13 @@ async function initFolderDestination() {
         headerContainer.appendChild(buttonBackup);
 
     }
+
+    // If have items add to form
+    if (items != null && items != undefined && items.length > 0) {
+        for (let i = 0; i < items.length; i++) {
+            addItem(items[i].dataValues.code, items[i].dataValues.path);
+        }
+    }
 }
 
 /**
@@ -112,16 +120,22 @@ async function initFolderDestination() {
 async function backup() {
     let folder = document.getElementById(E_BK_ID_HEADER_FOLDER).value;
     const path = require('path');
+    const zip = require('zip-a-folder').zip;
     let folderBack = null;
 
     if (folder != null && folder != undefined && folder.trim() != "") {
         folderBack = path.join(folder, new Date().toISOString().replace(".", "M").replace("-", "").replace("-", "").replace(":", "").replace(":", ""));
         await remote.getGlobal('deleteAllFolders')();
-        console.log(await remote.getGlobal('createFolder')(folder));
+        await remote.getGlobal('createFolder')(folder);
         mkdir(folderBack);
+    } else {
+        addMessage(I18N.i18n_folder_empty, 0);
+        return 0;
     }
 
     try {
+        // Delete all lines
+        await remote.getGlobal('deleteAllItems')();
         // Get all inputs line 
         let inputLines = document.getElementsByClassName('e-bk-line-input');
 
@@ -134,9 +148,19 @@ async function backup() {
 
                 if (inputValue != null && inputValue != undefined && inputValue.trim() != "") {
                     copyRecursiveSync(inputValue, path.join(folderBack, path.basename(inputValue)));
+                    // Create item
+                    await remote.getGlobal('createItem')(inputId, inputValue.trim());
                 }
             }
         }
+
+        // Zip files 
+        await zip(folderBack, folderBack+".zip");
+
+        // Remove files
+        rmdir(folderBack);
+
+        addMessage(I18N.i18n_backup_success, 2);
 
     } catch (ex) {
         console.log(ex);
@@ -164,6 +188,7 @@ function onChangeFileFolder(event, idBk) {
         if (value != null && value != undefined && value.trim() != '') {
             // If file not exsite, set blank value
             if (!existFileOrFolder(value)) {
+                addMessage(I18N.i18n_folder_not_exist, 0);
                 getElementById(event.target.id).value = '';
                 value = '';
             }
@@ -190,9 +215,13 @@ function addItem(idItem, valueItem) {
         } else {
             idItem = parseInt(keys[keys.length - 1]) + 1;
         }
+    } else {
+        if (idItem instanceof String) {
+            idItem = parseInt(idItem);
+        }
     }
 
-    E_BK_DATA.backupdData[idItem] = valueItem instanceof String ? parseInt(valueItem) : valueItem;
+    E_BK_DATA.backupdData[idItem] = valueItem;
 
     let linesContainer = document.getElementById(E_BK_ID_LINES);
 
@@ -209,6 +238,8 @@ function addItem(idItem, valueItem) {
     inputLine.id = idItem + "LineInput";
 
     inputLine.type = "text";
+
+    inputLine.value = valueItem;
 
     inputLine.onchange = function (event) {
         onChangeFileFolder(event, idItem);
@@ -318,4 +349,43 @@ function deleteAllItem() {
     E_BK_DATA.backupdData = {};
 
     document.getElementById(E_BK_ID_LINES).innerHTML = "";
+}
+
+/**
+ * Method to add message
+ * @param {*} text 
+ * @param {*} level 
+ */
+function addMessage(text, level) {
+    let messageDiv = document.createElement("DIV");
+    let levelClass = "info";
+
+    if (level != null && level != undefined) {
+        if (level == 0) {
+            levelClass = "danger";
+        } else if (level == 1) {
+            levelClass = "warnig";
+        } else if (level == 2) {
+            levelClass = "info";
+        }
+    }
+
+    messageDiv.classList.add("e-bk-alert-item");
+    messageDiv.classList.add("e-bk-alert-item-" + levelClass);
+
+    messageDiv.onclick = function () {
+        document.getElementById("e-bk-alert").removeChild(messageDiv);
+    };
+
+    messageDiv.innerHTML = text;
+
+    document.getElementById("e-bk-alert").appendChild(messageDiv);
+
+    setTimeout(function (
+
+    ) {
+        document.getElementById("e-bk-alert").removeChild(messageDiv);
+    }
+        , 15000
+    );
 }

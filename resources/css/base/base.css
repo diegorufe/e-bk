@@ -46,3 +46,35 @@ body, html, .e-bk{
     width: 100%;
     margin-bottom: 10px;
 }
+
+.e-bk-alert{
+    float: right;
+    position: fixed;
+    z-index: 9999;
+    top: 80px;
+    left: calc(100% - 300px);
+    cursor: pointer;
+}
+
+.e-bk-alert-item{
+    position: relative;
+    z-index: 9999;
+    color: white;
+    padding: 40px;
+    text-align: center;
+    width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.e-bk-alert-item-info{
+    background: #28a745;
+}
+
+.e-bk-alert-item-danger{
+    background: #dc3545;
+}
+
+.e-bk-alert-item-warnig{
+    background: orange;
+}

@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "sequelize": "^4.42.0",
-    "sqlite3": "^4.0.4"
+    "sqlite3": "^4.0.4",
+    "zip-a-folder": "0.0.8"
   },
   "build": {
     "asar": true,
