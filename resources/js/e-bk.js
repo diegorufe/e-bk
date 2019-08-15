@@ -155,7 +155,7 @@ async function backup() {
         }
 
         // Zip files 
-        await zip(folderBack, folderBack+".zip");
+        await zip(folderBack, folderBack + ".zip");
 
         // Remove files
         rmdir(folderBack);
@@ -219,6 +219,10 @@ function addItem(idItem, valueItem) {
         if (idItem instanceof String) {
             idItem = parseInt(idItem);
         }
+    }
+
+    if (valueItem == null || valueItem == undefined) {
+        valueItem = "";
     }
 
     E_BK_DATA.backupdData[idItem] = valueItem;
