@@ -27,7 +27,7 @@
     "electron-rebuild": "^1.8.2"
   },
   "dependencies": {
-    "sequelize": "^4.42.0",
+    "sequelize": "^5.15.1",
     "sqlite3": "^4.0.4",
     "zip-a-folder": "0.0.8"
   },
